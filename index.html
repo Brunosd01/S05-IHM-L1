@@ -1,11 +1,703 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1> olá mundo!!! </h1>
-</body>
+<html lang="pt-BR">
+  <head>
+    <title>App Inatel - NOE Integrado</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+    
+    <style>
+      /* --- VARIÁVEIS E TEMAS (PADRÃO: TEMA INATEL) --- */
+      :root {
+        /* As cores serão definidas por temaInatel() no carregamento */
+        --cor-click: #126ae2;
+        --cor-sombra: #0a599b;
+        --cor-text: black;
+        --cor-back1: #edf2f4;
+        --cor-back2: #6a937a;
+
+        --md-sys-color-primary: #126ae2;
+        --frequencia: #126ae2;
+        --nota: #126ae2;
+        --prova: #126ae2;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--cor-back1);
+        font-family: "Arimo", sans-serif;
+      }
+
+      /* Helpers de utilidade */
+      .view-section {
+        transition: opacity 0.3s ease;
+      }
+      .hidden-view {
+        display: none !important;
+      }
+
+      /* --- HEADER --- */
+      header {
+        position: relative;
+        height: 35px;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: transparent;
+      }
+
+      #menu {
+        position: absolute;
+        left: 0;
+        top: 10px;
+        margin-left: 15px;
+        cursor: pointer;
+      }
+
+      #logo {
+        position: absolute;
+        top: 13px;
+        left: 50%;
+        transform: translate(-50%);
+      }
+
+      .svg_logo { width: 80px; }
+      .path_logo { fill: var(--cor-click); }
+
+      #perfil {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        margin-right: 15px;
+      }
+
+      /* --- CONTEÚDO HOME --- */
+      #mensagens {
+        position: relative;
+        background-color: white;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        margin: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      #user_name { display: block; font-size: 17pt; color: var(--cor-text); }
+
+      #mns_box { margin-top: 5px; }
+
+      #icon {
+        width: 18px;
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 5px;
+      }
+
+      #mns { padding: 5px; width: 80%; display: inline-block; color: var(--cor-text); }
+
+      .material-symbols-outlined {
+        color: var(--cor-click);
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .icoG { font-size: 30px; }
+      .icoP { font-size: 18px; }
+
+      .font {
+        font-family: "Arimo", sans-serif;
+        font-size: 11px;
+        color: var(--cor-text);
+      }
+
+      /* --- MENU LATERAL --- */
+      #menu_aba {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
+        transition: 0.5s;
+        z-index: 1000;
+        display: none;
+        border-radius: 10px;
+        padding-top: 20px;
+      }
+
+      .menu_title {
+        padding: 10px 20px;
+        font-family: "Arimo", sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 10px;
+      }
+
+      #menu_bot {
+        position: relative;
+        padding: 20px;
+        display: block;
+        cursor: pointer;
+        font-family: "Arimo", sans-serif;
+        font-size: 14pt;
+        color: var(--cor-click);
+        transition: 0.3s;
+      }
+      #menu_bot:hover { background-color: rgba(0,0,0,0.05); }
+
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        color: #888;
+        cursor: pointer;
+        font-family: sans-serif;
+      }
+
+      /* --- CARROSSEL --- */
+      .carousel-container {
+        position: relative;
+        overflow: hidden;
+        background-color: white;
+        border-radius: 10px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 350px;
+      }
+
+      .carousel {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        height: 100%;
+      }
+
+      .card {
+        min-width: 100%;
+        text-align: center;
+        height: 100%;
+      }
+
+      .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .info { padding: 10px; color: var(--cor-text); }
+      
+      .info h3 { font-size: 16px; margin: 5px 0; }
+      .info p { font-size: 12px; margin: 5px 0; }
+
+      .icon {
+        font-size: 15px;
+        margin-left: 5px;
+        margin-right: 2px;
+        width: 18px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      button.carousel-btn {
+        position: absolute;
+        top: 30%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 10px;
+        z-index: 2;
+      }
+      #prevBtn { left: 10px; }
+      #nextBtn { right: 10px; }
+
+      /* --- ESTILOS DO FLUXO NOE --- */
+      #noe-view {
+        padding: 20px;
+        color: var(--cor-text);
+      }
+
+      .noe-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+
+      .noe-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: var(--cor-click);
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+
+      /* Grid de horários */
+      .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .time-slot {
+        background-color: var(--cor-back1);
+        border: 1px solid var(--cor-click);
+        color: var(--cor-click);
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .time-slot:hover {
+        background-color: var(--cor-click);
+        color: white;
+      }
+
+      .time-slot.unavailable {
+        background-color: #e0e0e0;
+        border-color: #ccc;
+        color: #999;
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+
+      .day-section { margin-top: 15px; }
+      .day-title { font-weight: bold; margin-bottom: 5px; font-size: 14px;}
+
+      /* Formulário */
+      textarea.noe-input {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin: 15px 0;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
+
+      /* Botões Padrão */
+      .btn-primary {
+        background-color: var(--cor-click);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--cor-click);
+        border: 1px solid var(--cor-click);
+        padding: 10px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      /* Confirmação */
+      .success-container {
+        text-align: center;
+        padding: 40px 20px;
+      }
+      .success-icon {
+        font-size: 60px;
+        color: #28a745;
+        margin-bottom: 20px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <main>
+      
+      <!-- MENU_ABA -->
+      <div id="menu_aba">
+        <div class="close-btn" onclick="closeMenu()">&times;</div>
+
+        <div class="menu_title">Navegação</div>
+        
+        <div id="menu_bot" onclick="closeMenu(); goHome()">
+          <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 10px;">home</span>
+          Início
+        </div>
+        
+        <div id="menu_bot" onclick="closeMenu(); startNoeFlow()">
+          <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 10px;">calendar_month</span>
+          Agendamento NOE
+        </div>
+
+        <hr style="width: 90%; border: 0; border-top: 1px solid #ddd; margin: 10px auto;">
+
+        <div class="menu_title">Personalização</div>
+        
+        <div id="menu_bot" onclick="closeMenu(); temaInatel()">
+            Tema Inatel (Padrão)
+        </div>
+        <div id="menu_bot" onclick="closeMenu(); temaLim()">
+            Tema Limão
+        </div>
+        <div id="menu_bot" onclick="closeMenu(); temaDark()">
+            Tema Dark
+        </div>
+      </div>
+
+      <!-- HEADER FIXO -->
+      <header id="head">
+        <div id="menu" onclick="openMenu()">
+          <span class="material-symbols-outlined icoG">menu</span>
+        </div>
+
+        <div id="logo">
+          <svg class="svg_logo" xmlns="http://www.w3.org/2000/svg" viewBox="100 150 390 116">
+            <path class="path_logo" d="M127.455,156.988h21.287l-21.859,102.835H105.69L127.455,156.988z M225.618,208.048 l-10.941,51.775H194.51l9.726-45.911c0.286-1.168,0.477-2.312,0.62-3.456c0.143-1.144,0.214-2.145,0.214-3.027 c0-2.86-0.834-4.982-2.527-6.412c-1.668-1.407-4.147-2.122-7.461-2.122c-5.078,0-9.392,1.406-12.968,4.219 c-3.552,2.836-5.888,6.698-6.96,11.633l-9.559,45.076h-20.31l16.186-75.946h19.905l-2.002,9.559 c3.957-3.886,8.105-6.793,12.491-8.701c4.362-1.907,9.011-2.86,13.945-2.86c6.508,0,11.656,1.501,15.447,4.529 c3.79,3.027,5.697,7.151,5.697,12.372c0,1.239-0.096,2.55-0.286,3.933C226.143,205.855,225.857,207.309,225.618,208.048z M282.709,222.636c-3.29,1.455-7.318,2.646-12.038,3.6c-4.744,0.954-7.557,1.55-8.438,1.788c-3.218,0.978-5.674,2.526-7.414,4.648 c-1.716,2.122-2.574,4.672-2.574,7.652c0,2.074,0.739,3.719,2.24,4.887c1.478,1.168,3.552,1.74,6.222,1.74 c5.078,0,9.487-1.574,13.206-4.721s6.15-7.342,7.271-12.61L282.709,222.636z M306.333,202.613l-9.154,43.145c-0.238,1.313-0.405,2.432-0.524,3.361c-0.119,0.929-0.167,1.717-0.167,2.385 c0,1.168,0.167,2.098,0.548,2.789c0.381,0.715,1.049,1.406,2.026,2.098l-0.763,3.432h-21.025 c-0.048-0.285-0.143-0.643-0.286-1.119c-0.381-1.813-0.572-3.076-0.572-3.768c0-0.428,0.048-1,0.119-1.715 c0.072-0.74,0.167-1.574,0.31-2.551c-3.218,3.861-7.032,6.793-11.49,8.818c-4.458,2.027-9.344,3.053-14.708,3.053 c-5.721,0-10.274-1.455-13.659-4.338c-3.361-2.885-5.054-6.771-5.054-11.658c0-9.51,2.574-16.876,7.724-22.097 c5.125-5.197,13.206-8.629,24.171-10.25c1.788-0.287,4.195-0.645,7.271-1.049c10.131-1.168,15.185-4.53,15.185-10.108 c0-2.098-0.834-3.623-2.527-4.577c-1.669-0.954-4.338-1.43-8.033-1.43c-4.195,0-7.581,0.93-10.131,2.813 c-2.574,1.883-4.052,4.529-4.481,7.914h-19.166c1.359-8.2,5.292-14.684,11.824-19.451c6.507-4.768,14.731-7.151,24.672-7.151 c8.987,0,15.971,1.454,20.954,4.362s7.484,6.984,7.484,12.205c0,0.834-0.047,1.668-0.143,2.503 C306.642,201.063,306.5,201.874,306.333,202.613z M335.081,163.281h20.31l-4.338,20.595h12.634l-3.004,14.303h-12.776l-8.844,42.026 c0,0.238-0.048,0.547-0.144,0.93c-0.095,0.404-0.144,0.668-0.144,0.811c0,1.119,0.549,1.93,1.67,2.406 c1.119,0.502,3.051,0.74,5.792,0.74h4.409l-3.289,15.303c-1.168,0.049-2.717,0.096-4.672,0.145 c-3.528,0.094-5.84,0.143-6.913,0.143c-6.508,0-11.18-0.883-14.017-2.646c-2.837-1.787-4.267-4.672-4.267-8.678 c0-1.119,0.118-2.455,0.357-4.051c0.214-1.574,0.596-3.6,1.12-6.08l8.701-41.048h-10.752l3.004-14.303h10.895L335.081,163.281z M432.339,227.213H383.4c-0.167,1.025-0.311,2.026-0.405,3.004c-0.094,0.978-0.144,1.835-0.144,2.574 c0,4.1,0.978,7.199,2.956,9.297c1.978,2.098,4.911,3.146,8.772,3.146c3.266,0,6.031-0.668,8.344-1.979s4.434-3.48,6.389-6.46 h20.309c-3.576,7.962-8.914,14.208-16.018,18.761c-7.105,4.553-14.994,6.842-23.695,6.842c-8.63,0-15.424-2.551-20.43-7.676 c-5.006-5.127-7.508-12.016-7.508-20.692c0-6.197,1.096-12.609,3.289-19.236c2.17-6.627,5.077-12.325,8.725-17.092 c4.172-5.435,9.059-9.559,14.588-12.348s11.633-4.195,18.283-4.195c8.939,0,15.924,2.36,20.955,7.104 c5.029,4.72,7.531,11.275,7.531,19.666c0,2.193-0.213,4.696-0.666,7.534C434.246,218.322,433.458,222.232,432.339,227.213z M414.46,213.912c0.143-1.119,0.262-2.098,0.334-2.955c0.07-0.858,0.096-1.55,0.096-2.05c0-3.385-0.979-6.031-2.957-7.914 c-1.978-1.883-4.768-2.813-8.344-2.813c-4.146,0-7.676,1.335-10.607,4.005c-2.93,2.67-5.172,6.579-6.697,11.728H414.46z M461.826,156.988h20.311l-21.932,102.835h-20.262L461.826,156.988z"></path>
+          </svg>
+        </div>
+
+        <div id="perfil">
+          <span class="material-symbols-outlined icoG">person</span>
+        </div>
+      </header>
+
+      <!-- VIEW: HOME (Conteúdo Original) -->
+      <div id="home-view" class="view-section">
+        <div id="mensagens">
+          <div id="user_name" class="font"><b>Olá Bruno Silva!</b></div>
+
+          <div id="mns_box">
+            <div id="icon">
+              <span class="material-symbols-outlined icoP">notifications_active</span>
+            </div>
+            <div id="mns" class="font">
+              Você não possui nenhum aviso no sistema hoje
+            </div>
+          </div>
+
+          <div id="mns_box">
+            <div id="icon">
+              <span class="material-symbols-outlined icoP">mail</span>
+            </div>
+            <div id="mns" class="font">
+              Você possui uma pendência no Sistema de Bolsas de estudos...
+            </div>
+          </div>
+        </div>
+
+        <aulas-component id="componente"></aulas-component>
+
+        <div class="carousel-container">
+          <div class="carousel"></div>
+          <button class="carousel-btn" id="prevBtn">❮</button>
+          <button class="carousel-btn" id="nextBtn">❯</button>
+        </div>
+      </div>
+
+      <!-- VIEW: AGENDAMENTO NOE -->
+      <div id="noe-view" class="view-section hidden-view">
+        <div class="noe-card">
+          
+          <!-- Passo 1: Seleção de Horário -->
+          <div id="noe-step-1">
+            <div class="noe-header">Agendamento NOE</div>
+            <p>Selecione um horário disponível para atendimento:</p>
+            
+            <div class="day-section">
+              <div class="day-title">Segunda-feira (12/05)</div>
+              <div class="schedule-grid">
+                <div class="time-slot" onclick="selectTime('12/05 - 09:00')">09:00</div>
+                <div class="time-slot unavailable">10:00</div>
+                <div class="time-slot" onclick="selectTime('12/05 - 11:00')">11:00</div>
+                <div class="time-slot unavailable">14:00</div>
+                <div class="time-slot" onclick="selectTime('12/05 - 15:00')">15:00</div>
+                <div class="time-slot" onclick="selectTime('12/05 - 16:00')">16:00</div>
+              </div>
+            </div>
+
+            <div class="day-section">
+              <div class="day-title">Terça-feira (13/05)</div>
+              <div class="schedule-grid">
+                <div class="time-slot" onclick="selectTime('13/05 - 08:00')">08:00</div>
+                <div class="time-slot" onclick="selectTime('13/05 - 09:00')">09:00</div>
+                <div class="time-slot unavailable">10:00</div>
+              </div>
+            </div>
+            
+            <button class="btn-secondary" onclick="goHome()" style="margin-top:20px;">Cancelar e Voltar</button>
+          </div>
+
+          <!-- Passo 2: Motivo -->
+          <div id="noe-step-2" class="hidden-view">
+            <div class="noe-header">Detalhes do Agendamento</div>
+            <p>Horário selecionado: <b id="display-selected-time"></b></p>
+            
+            <p style="margin-top:15px;">Qual o motivo ou assunto da sessão?</p>
+            <textarea id="noe-reason" class="noe-input" placeholder="Ex: Dúvidas sobre carreira, ansiedade pré-prova, organização de estudos..."></textarea>
+            
+            <button class="btn-primary" onclick="confirmAppointment()">Confirmar Agendamento</button>
+            <button class="btn-secondary" onclick="backToStep1()">Voltar</button>
+          </div>
+
+          <!-- Passo 3: Sucesso -->
+          <div id="noe-step-3" class="hidden-view">
+            <div class="success-container">
+              <span class="material-symbols-outlined success-icon">check_circle</span>
+              <h2 style="color: #28a745;">Agendamento confirmado!</h2>
+              <p>Seu horário foi reservado com sucesso.</p>
+              <br>
+              <button class="btn-primary" onclick="goHome()">Voltar para o início</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <script>
+      // --- LÓGICA DE TEMAS ---
+      function temaInatel() {
+        // Tema Padrão Azul/Branco (Original)
+        document.documentElement.style.setProperty("--cor-click", "#126ae2");
+        document.documentElement.style.setProperty("--cor-sombra", "#0a599b");
+        document.documentElement.style.setProperty("--cor-text", "black");
+        document.documentElement.style.setProperty("--cor-back1", "#edf2f4"); // Fundo Claro
+        document.documentElement.style.setProperty("--cor-back2", "#6a937a");
+        document.documentElement.style.setProperty("--md-sys-color-primary", "#126ae2");
+        // Atualiza a cor de fundo do body e a cor do texto para o tema Inatel/Padrão
+        document.body.style.backgroundColor = "var(--cor-back1)";
+        document.body.style.color = "var(--cor-text)";
+      }
+      
+      function temaLim() {
+        // Tema Limão Verde/Roxo
+        document.documentElement.style.setProperty("--cor-click", "#38184C");
+        document.documentElement.style.setProperty("--cor-sombra", "#9b0a59");
+        document.documentElement.style.setProperty("--cor-text", "black");
+        document.documentElement.style.setProperty("--cor-back1", "#CEF09D"); // Fundo Limão
+        document.documentElement.style.setProperty("--cor-back2", "#4f6a93");
+        document.documentElement.style.setProperty("--md-sys-color-primary","#38184C");
+        // Atualiza a cor de fundo do body e a cor do texto para o tema Limão
+        document.body.style.backgroundColor = "var(--cor-back1)";
+        document.body.style.color = "var(--cor-text)";
+      }
+
+      function temaDark() {
+        // Tema Escuro (Dark Mode)
+        document.documentElement.style.setProperty("--cor-click", "#CEF09D");
+        document.documentElement.style.setProperty("--cor-sombra", "#9b0a59");
+        document.documentElement.style.setProperty("--cor-text", "white"); // Texto Branco
+        document.documentElement.style.setProperty("--cor-back1", "#38184C"); // Fundo Escuro Roxo
+        document.documentElement.style.setProperty("--cor-back2", "#4f6a93");
+        document.documentElement.style.setProperty("--md-sys-color-primary", "#CEF09D");
+        // Atualiza a cor de fundo do body e a cor do texto para o tema Dark
+        document.body.style.backgroundColor = "var(--cor-back1)";
+        document.body.style.color = "var(--cor-text)";
+      }
+
+      // --- NAVEGAÇÃO ENTRE TELAS ---
+      function goHome() {
+        document.getElementById("home-view").classList.remove("hidden-view");
+        document.getElementById("noe-view").classList.add("hidden-view");
+      }
+
+      function startNoeFlow() {
+        document.getElementById("home-view").classList.add("hidden-view");
+        document.getElementById("noe-view").classList.remove("hidden-view");
+        // Resetar para o passo 1
+        backToStep1();
+      }
+
+      // --- LÓGICA DO NOE ---
+      let selectedTimeSlot = "";
+
+      // Seleciona o horário e avança para o passo 2
+      function selectTime(time) {
+        // Ignora slots indisponíveis (apenas para slots clicáveis)
+        // Certifique-se de que o elemento não tem a classe 'unavailable' antes de prosseguir
+        const target = event.target;
+        if (target.classList.contains('unavailable')) return;
+
+        selectedTimeSlot = time;
+        document.getElementById("display-selected-time").innerText = time;
+        
+        // Trocar para passo 2
+        document.getElementById("noe-step-1").classList.add("hidden-view");
+        document.getElementById("noe-step-2").classList.remove("hidden-view");
+      }
+
+      // Volta do passo 2 para o passo 1 (seleção de horário)
+      function backToStep1() {
+        document.getElementById("noe-step-1").classList.remove("hidden-view");
+        document.getElementById("noe-step-2").classList.add("hidden-view");
+        document.getElementById("noe-step-3").classList.add("hidden-view");
+        document.getElementById("noe-reason").value = ""; // Limpar texto
+      }
+
+      // Confirma o agendamento e avança para o passo 3 (sucesso)
+      function confirmAppointment() {
+        const reason = document.getElementById("noe-reason").value;
+        if(reason.trim() === "") {
+          // Usa um modal ou uma div customizada em vez de alert()
+          const messageBox = document.createElement('div');
+          messageBox.style.cssText = 'position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1001; text-align: center;';
+          messageBox.innerHTML = '<p>Por favor, digite um motivo para o agendamento.</p><button onclick="this.parentNode.remove()" class="btn-primary" style="width: 100px; padding: 8px; margin-top: 10px;">OK</button>';
+          document.body.appendChild(messageBox);
+          return;
+        }
+
+        // Trocar para passo 3 (Sucesso)
+        document.getElementById("noe-step-2").classList.add("hidden-view");
+        document.getElementById("noe-step-3").classList.remove("hidden-view");
+      }
+
+      // --- LÓGICA DO MENU ---
+      
+      function openMenu() {
+        document.getElementById("menu_aba").style.display = "block";
+      }
+
+      function closeMenu() {
+        document.getElementById("menu_aba").style.display = "none";
+      }
+
+      // --- LÓGICA DO CARROSSEL (Atualizada com URLs de Placeholder) ---
+      const eventos = [
+        { id: 1, title: "Semana do Software 2025", date: "12/05", time: "10:00", location: "Salão de Eventos", type: "tech", description: "Uma semana inteira dedicada à tecnologia e inovação.", image: "https://placehold.co/800x400/003366/ffffff?text=Semana+do+Software" },
+        { id: 2, title: "Workshop de IoT", date: "12/01", time: "08:00", location: "Laboratório CS&I", type: "tech", description: "Workshop prático sobre Internet das Coisas.", image: "https://placehold.co/800x400/CC0033/ffffff?text=Workshop+IoT" },
+        { id: 3, title: "Festa dos Alunos 2025", date: "18/05", time: "19:00", location: "Área Esportiva", type: "cultural", description: "Venha comemorar a melhor Festa dos Alunos!", image: "https://placehold.co/800x400/1e40af/ffffff?text=Festa+dos+Alunos" }
+      ];
+
+      const carousel = document.querySelector(".carousel");
+
+      function createCards() {
+        eventos.forEach((event) => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = `
+                  <img src="${event.image}" alt="${event.title}" onerror="this.onerror=null; this.src='https://placehold.co/800x400/cccccc/333333?text=Imagem+Nao+Encontrada';">
+                  <div class="info">
+                      <h3>${event.title}</h3>
+                      <p>${event.description}</p>
+                      <p><span class="material-symbols-outlined icon">event</span> ${event.date} às ${event.time} <span class="material-symbols-outlined icon">pin_drop</span> ${event.location}</p>
+                  </div>
+              `;
+          carousel.appendChild(card);
+        });
+      }
+
+      let index = 0;
+      function nextCard() {
+        index = (index + 1) % eventos.length;
+        updateCarousel();
+      }
+
+      function prevCard() {
+        index = (index - 1 + eventos.length) % eventos.length;
+        updateCarousel();
+      }
+
+      function updateCarousel() {
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      document.getElementById("nextBtn").addEventListener("click", nextCard);
+      document.getElementById("prevBtn").addEventListener("click", prevCard);
+
+      setInterval(nextCard, 5000);
+      
+      // Touch events for Carousel
+      let startX;
+      carousel.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
+      carousel.addEventListener("touchend", (e) => {
+        let endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50) nextCard();
+        if (endX - startX > 50) prevCard();
+      });
+
+      createCards();
+
+      // --- WEB COMPONENT AULAS (Mantido do arquivo base) ---
+      class AulasComponent extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this.aulas = [
+            { id: 1, disciplina: "S05 - Interface Homem-máquina", data: "ter", horario: "10:00", local: "P1-S17", prova_alert: false, frequencia: "10/25", nota: "10" },
+            { id: 2, disciplina: "E01 - Circuitos Elétricos CC", data: "ter", horario: "10:00", local: "P1-S17", prova_alert: true, frequencia: "10/25", nota: "5" },
+            { id: 3, disciplina: "M02 - Álgebra e Geometria", data: "qua", horario: "10:00", local: "P1-S17", prova_alert: true, frequencia: "10/25", nota: "7" },
+          ];
+          this.hoje = "ter";
+        }
+
+        connectedCallback() { this.render(); }
+
+        getNotaColor(nota) {
+          const valorNota = parseFloat(nota);
+          if (valorNota < 6) return "#dc3545";
+          if (valorNota < 8) return "#ffc107";
+          return "#28a745";
+        }
+
+        render() {
+          const aulasDia = this.aulas.filter((a) => a.data === this.hoje);
+          this.shadowRoot.innerHTML = `
+            <style>
+              /* Importante: Herda variáveis de cor do host para manter o tema */
+              :host { 
+                --cor-text: var(--cor-text, black); 
+                --frequencia: var(--frequencia, #126ae2); 
+              }
+              .comp-aula {
+                background-color: white; padding: 15px; margin: 20px;
+                border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+              }
+              .titulo_aula { font-family: "Arimo", sans-serif; font-weight: bold; font-size: 15px; color: var(--cor-text); }
+              p { font-family: "Arimo", sans-serif; font-size: 11px; color: var(--cor-text); }
+              .lables { display: flex; margin-top: 10px; }
+              .lable-item { padding: 7px 15px; margin-right: 10px; border-radius: 500px; color: white; font-family: "Arimo", sans-serif; font-size: 11px; }
+            </style>
+            <div>
+              ${aulasDia.map((a) => `
+                  <div class="comp-aula">
+                    <div class="titulo_aula">${a.disciplina}</div>
+                    <p>Local: <b>${a.local} - ${a.horario}</b></p>
+                    <div class="lables">
+                      <div class="lable-item" style="background-color: var(--frequencia)">FALTAS: <b>${a.frequencia}</b></div>
+                      <div class="lable-item" style="background-color: ${this.getNotaColor(a.nota)}">CR: <b>${a.nota}</b></div>
+                    </div>
+                  </div>
+                `).join("")}
+            </div>
+          `;
+        }
+      }
+      customElements.define("aulas-component", AulasComponent);
+      
+      // GARANTE QUE O TEMA INATEL SEJA O PADRÃO NO CARREGAMENTO
+      document.addEventListener('DOMContentLoaded', temaInatel);
+    </script>
+  </body>
 </html>
